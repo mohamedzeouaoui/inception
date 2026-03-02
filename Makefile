@@ -3,6 +3,11 @@ COMPOSE_FILE = srcs/docker-compose.yml
 DB_VOLUME_PATH = /home/mzeouaou/data/mariadb
 WP_VOLUME_PATH = /home/mzeouaou/data/wp_webfiles
 
+.PHONY: all create_hdd build up down rmi-local rem-host-folder clean fclean re
+
+# default target: build and start everything
+all: up
+
 # create host data directories
 create_hdd:
 	sudo mkdir -p $(DB_VOLUME_PATH) $(WP_VOLUME_PATH)
@@ -15,15 +20,15 @@ build:
 up: create_hdd build
 	docker compose -f $(COMPOSE_FILE) up -d
 
-# stop and remove all the containers, networks
+# stop and remove all the containers, networks, volumes
 down:
-	docker compose -f $(COMPOSE_FILE) down -v
+	docker compose -f $(COMPOSE_FILE) down --volumes
 
-# remove local images
+# remove local project images
 rmi-local:
-	docker image prune -a -f
+	docker compose -f $(COMPOSE_FILE) down --rmi all
 
-rec-host-folder:
+rem-host-folder:
 	sudo rm -r $(DB_VOLUME_PATH) $(WP_VOLUME_PATH)
 
 # clean-up
