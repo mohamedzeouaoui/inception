@@ -35,7 +35,7 @@ rem-host-folder:
 clean: down rmi-local
 
 # clean-up + recreate host data directory
-fclean: clean rec-host-folder
+fclean: clean rem-host-folder
 
 # stop, remove, clean, rebuild, set-up, run
 re: clean up
